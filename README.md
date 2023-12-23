@@ -2,7 +2,7 @@
 
 This tool allows you to very quickly and easily switch the music in Super Mario RPG Remake.
 
-A short tutorial will be provided in the near future but it's a fairly simple program. Just download and run the Exe.
+A short tutorial will be provided in the near future but it's a fairly simple program. Just download and run the Exe and you'll be given instructions. Modded files will be in the MusicMod folder while your customm  music that you seleccted will move to the Custom Music folder
 
 This program relys on FFMpeg (Which you'll need to install if you don't have it. Google + Youtube is your friend here), SonicAudioTools & VGAudioCli which are included within the package.
 
