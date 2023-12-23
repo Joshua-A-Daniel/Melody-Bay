@@ -13,6 +13,6 @@ Songs will attempt to automatically loop but there is an option to manually put 
 Only requirements from the user are:
 1. A song you'd like to loop
 2. FFMpeg being properly installed
-3. A folder stucture that doesn't contain spaces
+3. A folder structure that doesn't contain spaces
 
-This is my first ever program so the code is messy and will be updated as I continue to learn more. 
+This is my first ever program so the code likely need work and will be updated as I continue to learn more. 
