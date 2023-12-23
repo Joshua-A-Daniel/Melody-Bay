@@ -11,6 +11,7 @@ import threading
 import wave
 import struct
 import sys
+import json
 
 root = tb.Window(themename = "superhero")
 root.title("Melody Bay")
@@ -29,8 +30,43 @@ songList = []
 fullPath = ""
 slash = chr(92)
 
-if os.path.isdir(os.getcwd() + slash + "Switch") == False or os.path.isfile(os.getcwd() + slash + "Switch" + slash + "BGM2.awb") == False or os.path.isfile(os.getcwd() + slash + "Switch" + slash + "BGM2.acb") == False or os.path.isfile(os.getcwd() + slash + "SonicAudioTools" + slash + "AcbEditor.exe") == False or os.path.isfile(os.getcwd() + slash + "vgaudio" + slash + "VGAudioCli.exe") == False:
-    Messagebox.show_error('Please move the folder named "Switch" from your SMRPG game dump into the Melody Bay Directory and make sure VGAudio/Sonictools in the directory', "Error")
+
+config = None
+configDir = os.getcwd() + slash + "config.json"
+
+def save_config():
+    json.dump(config, open(configDir, "+w"), indent=4)
+
+if not os.path.isfile(configDir):
+    config = {
+        "SoundDirectory": ""
+    }
+    save_config()
+else:
+    config = json.load(open(configDir, "r"))
+
+def chooseSoundPath():
+    result = Messagebox.okcancel("Choose your romfs/Data/StreamingAssets/sound/Switch folder from your game dump.", "Choose Sound Folder")
+    if result == "OK":
+        result = True
+    else:
+        result = False
+    if result:
+        config["SoundDirectory"] = filedialog.askdirectory(title = "romfs/Data/StreamingAssets/sound/Switch")
+        if not os.path.isfile(config["SoundDirectory"] + slash + "BGM2.acb") or not os.path.isfile(config["SoundDirectory"] + slash + "BGM2.awb"):
+            Messagebox.show_error("The sound folder should contain BGM2.acb and BGM2.awb.", "Invalid path.")
+            return chooseSoundPath()
+
+        save_config()
+
+    return result
+
+while config["SoundDirectory"].strip() == "":
+    if not chooseSoundPath():
+        sys.exit()
+
+if os.path.isfile(os.getcwd() + slash + "SonicAudioTools" + slash + "AcbEditor.exe") == False or os.path.isfile(os.getcwd() + slash + "vgaudio" + slash + "VGAudioCli.exe") == False:
+    Messagebox.show_error('Please make sure VGAudio and SonicAudioTools are in the MelodyBay directory.', "Error")
     sys.exit()
 
 with open('SongList.txt') as my_file:
@@ -135,9 +171,9 @@ def swapMusic():
         pass
 
     if os.path.isfile(os.getcwd() + "\\MusicMod\\BGM2.acb") == False:
-        shutil.copy(os.getcwd() + "\\Switch\\BGM2.acb", os.getcwd() + "\\MusicMod\\BGM2.acb")
+        shutil.copy(config["SoundDirectory"] + "\\BGM2.acb", os.getcwd() + "\\MusicMod\\BGM2.acb")
     if os.path.isfile(os.getcwd() + "\\MusicMod\\BGM2.awb") == False:
-        shutil.copy(os.getcwd() + "\\Switch\\BGM2.awb", os.getcwd() + "\\MusicMod\\BGM2.awb")
+        shutil.copy(config["SoundDirectory"] + "\\BGM2.awb", os.getcwd() + "\\MusicMod\\BGM2.awb")
 
     customMusic = base_file + '.bin'  
     sonicAudioToolsFolderCreation = os.getcwd() + '\\SonicAudioTools\\AcbEditor.exe ' + os.getcwd() + "\\MusicMod\\BGM2.acb"
@@ -677,13 +713,17 @@ endEntry = tb.Entry(root)
 musicSwap_button = tb.Button(text="Add My Custom Music!", bootstyle="success", command = startSwapMusic_in_bg)
 musicSwap_button.pack(pady=10)
 
+
 #Progress bar
 progressBar = tb.Progressbar(root, bootstyle='success striped', maximum = 100, length = 200, value = 0)
 progressBar.pack(pady = 20)
 
+#ChoosePathButton
+choose_path_button = tb.Button(text = "Choose Sound Path", bootstyle="default", command = chooseSoundPath)
+choose_path_button.pack(side=BOTTOM, anchor="e")
+
 #InfoButton
 info_Button = tb.Button(text = "How to use Melody Bay", bootstyle="default", command = showInfo)
-info_Button.pack(side=BOTTOM, anchor="e")
-
+info_Button.pack(side=BOTTOM, anchor="e", pady=10)
 
 root.mainloop()
