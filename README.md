@@ -6,7 +6,7 @@ A short tutorial will be provided in the near future but it's a fairly simple pr
 
 This program relys on FFMpeg (Which you'll need to install if you don't have it. Google + Youtube is your friend here), SonicAudioTools & VGAudioCli which are included within the package.
 
-It also relys on another program made in python called "PyMusicLooper" which detects loop points for music files.
+It also relys on another program made in python called "PyMusicLooper" which detects loop points for music files. It needs to be downloaded via python for automatic looping to work
 
 Songs will attempt to automatically loop but there is an option to manually put in the looping points of a song via samples. Most songs from my testing loop seamlessly.
 
