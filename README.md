@@ -8,7 +8,7 @@ This program relys on FFMpeg (Which you'll need to install if you don't have it.
 
 It also relys on another program made in python called "PyMusicLooper" which detects loop points for music files.
 
-Songs will attempt to automatically loop but there is an option to manually put in the looping points of a song via samples. Most songs from my testing loop seemlessly.
+Songs will attempt to automatically loop but there is an option to manually put in the looping points of a song via samples. Most songs from my testing loop seamlessly.
 
 Only requirements from the user are:
 1. A song you'd like to loop
