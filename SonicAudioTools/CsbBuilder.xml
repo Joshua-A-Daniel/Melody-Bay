@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <NameNodeAfterParent>true</NameNodeAfterParent>
+  <BufferSize>4096</BufferSize>
+  <ProjectsDirectory>Projects</ProjectsDirectory>
+  <ProjectsName>New CSB Project</ProjectsName>
+  <ImportedCsbProjectDirectory>DirectoryOfCsb</ImportedCsbProjectDirectory>
+  <RenameToSoundElement>true</RenameToSoundElement>
+  <EnableThreading>true</EnableThreading>
+  <MaxThreads>4</MaxThreads>
+  <WavePlayer>WaveOut</WavePlayer>
+  <LoopCount>2</LoopCount>
+  <FadeTime>10</FadeTime>
+  <FadeDelay>0</FadeDelay>
+</Settings>
