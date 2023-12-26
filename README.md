@@ -1,4 +1,4 @@
-# MelodyBay Alpha v1.0
+# MelodyBay Alpha v0.2
 
 This tool allows you to very quickly and easily switch the music in Super Mario RPG Remake.
 
