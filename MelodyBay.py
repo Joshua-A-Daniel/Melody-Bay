@@ -115,7 +115,7 @@ def swapMusic():
     convertedTrack = str(userTrack[1])
     trackNoExt = convertedTrack.replace (".mp3", "")
     newAudio = os.getcwd() + '\\' + trackNoExt + '.wav'
-    print (os.getcwd() + slash + convertedTrack + ".wav")
+    wavFile = os.getcwd() + slash + trackNoExt + ".wav"
     if os.path.isfile(os.getcwd() + slash + convertedTrack + ".wav") == True:
         os.remove (os.getcwd() + slash + convertedTrack + ".wav")
     subprocess.call(['C:\\windows\\system32\\cmd.exe', '/C', 'ffmpeg -i ' + VGAudioCliArgs + " -ar 48000 " + newAudio])
@@ -126,14 +126,14 @@ def swapMusic():
     dummyFile = (f"{dummyFileNumber:05}"'_streaming.lopus')
     if dummyFileNumber == 10 or dummyFileNumber == 18 or dummyFileNumber == 21 or dummyFileNumber == 59 or dummyFileNumber == 71 or dummyFileNumber == 73:
         sampleRate = 48000.0 # hertz
-        duration = 1.0 # seconds
+        duration = 30.0 # seconds
         frequency = 440.0 # hertz
         obj = wave.open('sound.wav','w')
         obj.setnchannels(1) # mono
         obj.setsampwidth(2)
         obj.setframerate(sampleRate)
         for i in range(99999):
-            value = 0
+            value = 99
             data = struct.pack('<h', value)
             obj.writeframesraw( data )
         obj.close()
@@ -196,7 +196,7 @@ def swapMusic():
 
     os.system (sonicAudioToolsMuiscReplacement)
     shutil.rmtree (os.getcwd() + "\\MusicMod\\BGM2")
-    progressBar['value'] += 20
+    progressBar['value'] += 20  
     root.update()
 
     if os.path.isdir(os.getcwd() + '\\CustomMusic') == False:
@@ -206,19 +206,20 @@ def swapMusic():
     trackName = str(trackTuple[1])
     
     shutil.move(VGAudioCliArgs, os.getcwd() + '\\CustomMusic\\' + trackName)
-    trackDirectory = '\\CustomMusic\\' + trackName
 
-    if os.path.isdir(os.getcwd() + '\\CustomMusic\\LooperOutput') == True:
-        shutil.rmtree (os.getcwd() + '\\CustomMusic\\LooperOutput')
+    if os.path.isdir(os.getcwd() + '\\LooperOutput') == True:
+        shutil.rmtree (os.getcwd() + '\\LooperOutput')
+
+    print (wavFile)
 
     if manualLoop.get() == 0:
-        subprocess.call(['C:\\windows\\system32\\cmd.exe', '/C', 'pymusiclooper export-points --alt-export-top 0 --export-to txt --path ', os.getcwd() + trackDirectory])
-
-        word_list = open(os.getcwd() + '\\CustomMusic\\LooperOutput\\loops.txt').read().split()
+        subprocess.call(['C:\\windows\\system32\\cmd.exe', '/C', 'pymusiclooper export-points --alt-export-top 0 --export-to txt --path ', wavFile])
+        time.sleep(1)
+        word_list = open(os.getcwd() + '\\LooperOutput\\loops.txt').read().split()
 
         try:
             startingLoopSamples = int(word_list[0])
-            startingLoopHex = startingLoopSamples.to_bytes(3, "big")
+            startingLoopHex = startingLoopSamples.to_bytes(4, "big")
         except OverflowError:
             os.remove (os.getcwd() + '\\CustomMusic\\' + trackName)
             errorMessage = Messagebox.show_error("Song was too long, please select a different song or manually input the looping points", "Error")
@@ -227,7 +228,7 @@ def swapMusic():
 
         try:
             endingLoopSamples = int(word_list[1])
-            endingLoopHex = endingLoopSamples.to_bytes(3, "big")
+            endingLoopHex = endingLoopSamples.to_bytes(4, "big")
         except OverflowError:
             os.remove (os.getcwd() + '\\CustomMusic\\' + trackName)
             errorMessage = Messagebox.show_error("Song was too long, please select a different song or manually input the looping points", "Error")
@@ -235,7 +236,7 @@ def swapMusic():
     else:
         try:
             startingLoopSamples = int(startEntry.get())
-            startingLoopHex = startingLoopSamples.to_bytes(3, "big")
+            startingLoopHex = startingLoopSamples.to_bytes(4, "big")
         except OverflowError:
             os.remove (os.getcwd() + '\\CustomMusic\\' + trackName)
             errorMessage = Messagebox.show_error("Song was too long, please select a different song or manually input the looping points", "Error")
@@ -244,7 +245,7 @@ def swapMusic():
 
         try:
             endingLoopSamples = int(endEntry.get())
-            endingLoopHex = endingLoopSamples.to_bytes(3, "big")
+            endingLoopHex = endingLoopSamples.to_bytes(4, "big")
         except OverflowError:
             os.remove (os.getcwd() + '\\CustomMusic\\' + trackName)
             errorMessage = Messagebox.show_error("Song was too long, please select a different song or manually input the looping points", "Error")
@@ -271,351 +272,354 @@ def swapMusic():
     if songNumber == 0:
         pass
     elif songNumber == 1:
-        startByteLocationOne = 90443
-        endByteLocationOne = 8496
-        endByteLocationTwo = 90447
+        startByteLocationOne = 90442
+        endByteLocationOne = 8495
+        endByteLocationTwo = 90446
     elif songNumber == 2:
         pass
     elif songNumber == 3:
-        startByteLocationOne = 90541
-        endByteLocationOne = 8524
-        endByteLocationTwo = 90455
+        startByteLocationOne = 90450
+        endByteLocationOne = 8523
+        endByteLocationTwo = 90454
     elif songNumber == 4:
-        startByteLocationOne = 90459
-        endByteLocationOne = 8538
-        endByteLocationTwo = 90463
+        startByteLocationOne = 90458
+        endByteLocationOne = 8537
+        endByteLocationTwo = 90462
     elif songNumber == 5:
-        startByteLocationOne = 90467
-        endByteLocationOne = 8552
-        endByteLocationTwo = 90471
+        startByteLocationOne = 90466
+        endByteLocationOne = 8551
+        endByteLocationTwo = 90470
     elif songNumber == 6:
-        startByteLocationOne = 90475
-        endByteLocationOne = 8566
-        endByteLocationTwo = 90479
+        startByteLocationOne = 90474
+        endByteLocationOne = 8565
+        endByteLocationTwo = 90478
     elif songNumber == 7:
-        startByteLocationOne = 90483
-        endByteLocationOne = 8580
-        endByteLocationTwo = 90487
+        startByteLocationOne = 90482
+        endByteLocationOne = 8579
+        endByteLocationTwo = 90486
     elif songNumber == 8:
-        startByteLocationOne = 90491
-        endByteLocationOne = 8594
-        endByteLocationTwo = 90495
+        startByteLocationOne = 90490
+        endByteLocationOne = 8593
+        endByteLocationTwo = 90494
+   
     elif songNumber == 9:
-        startByteLocationOne = 90499
-        startByteLocationTwo = 90507
-        endByteLocationOne = 8608
-        endByteLocationTwo = 8623
-        endByteLocationThree = 90503
-        endByteLocationFour = 90512
+        startByteLocationOne = 90498
+        startByteLocationTwo = 90506
+        endByteLocationOne = 8607
+        endByteLocationTwo = 8621
+        endByteLocationThree = 90502
+        endByteLocationFour = 90510
     elif songNumber == 10:
-        startByteLocationOne = 90499
-        startByteLocationTwo = 90507
-        endByteLocationOne = 8608
-        endByteLocationTwo = 8623
-        endByteLocationThree = 90503
-        endByteLocationFour = 90512
+        startByteLocationOne = 90498
+        startByteLocationTwo = 90506
+        endByteLocationOne = 8607
+        endByteLocationTwo = 8621
+        endByteLocationThree = 90502
+        endByteLocationFour = 90510
     elif songNumber == 11:
-        startByteLocationOne = 90515
-        endByteLocationOne = 8636
-        endByteLocationTwo = 90519
+        startByteLocationOne = 90514
+        endByteLocationOne = 8635
+        endByteLocationTwo = 90518
     elif songNumber == 12:
-        startByteLocationOne = 90523
-        endByteLocationOne = 8650
-        endByteLocationTwo = 90527
+        startByteLocationOne = 90522
+        endByteLocationOne = 8649
+        endByteLocationTwo = 90526
     elif songNumber == 13:
         startByteLocationOne = 90531
-        endByteLocationOne = 8664
-        endByteLocationTwo = 90535
+        endByteLocationOne = 8663
+        endByteLocationTwo = 90534
     elif songNumber == 14:
         pass
     elif songNumber == 15:
-        startByteLocationOne = 90539
-        endByteLocationOne = 8692
-        endByteLocationTwo = 90543
+        startByteLocationOne = 90538
+        endByteLocationOne = 8691
+        endByteLocationTwo = 90542
     elif songNumber == 16:
         startByteLocationOne = 90547
-        endByteLocationOne = 8706
+        endByteLocationOne = 8705
         endByteLocationTwo = 90550
     elif songNumber == 17:
-        startByteLocationOne = 90555
-        startByteLocationTwo = 90563
-        endByteLocationOne = 8720
-        endByteLocationTwo = 8734
-        endByteLocationThree = 90559
-        endByteLocationFour = 90567
+        startByteLocationOne = 90554
+        startByteLocationTwo = 90562
+        endByteLocationOne = 8719
+        endByteLocationTwo = 8733
+        endByteLocationThree = 90558
+        endByteLocationFour = 90566
     elif songNumber == 18:
-        startByteLocationOne = 90555
-        startByteLocationTwo = 90563
-        endByteLocationOne = 8720
-        endByteLocationTwo = 8734
-        endByteLocationThree = 90559
-        endByteLocationFour = 90567
+        startByteLocationOne = 90554
+        startByteLocationTwo = 90562
+        endByteLocationOne = 8719
+        endByteLocationTwo = 8733
+        endByteLocationThree = 90558
+        endByteLocationFour = 90566
     elif songNumber == 19:
-        startByteLocationOne = 90571
-        endByteLocationOne = 8748
-        endByteLocationTwo = 90575
+        startByteLocationOne = 90570
+        endByteLocationOne = 8747
+        endByteLocationTwo = 90574
     elif songNumber == 20:
-        startByteLocationOne = 90579
-        startByteLocationTwo = 90587
-        endByteLocationOne = 8762
-        endByteLocationTwo = 8776
-        endByteLocationThree = 90583
-        endByteLocationFour = 90591
+        startByteLocationOne = 90578
+        startByteLocationTwo = 90586
+        endByteLocationOne = 8761
+        endByteLocationTwo = 8775
+        endByteLocationThree = 90582
+        endByteLocationFour = 90590
     elif songNumber == 21:
-        startByteLocationOne = 90579
-        startByteLocationTwo = 90587
-        endByteLocationOne = 8762
-        endByteLocationTwo = 8776
-        endByteLocationThree = 90583
-        endByteLocationFour = 90591
+        startByteLocationOne = 90578
+        startByteLocationTwo = 90586
+        endByteLocationOne = 8761
+        endByteLocationTwo = 8775
+        endByteLocationThree = 90582
+        endByteLocationFour = 90590
     elif songNumber == 22:
-        startByteLocationOne = 90595
-        endByteLocationOne = 8790
-        endByteLocationTwo = 90599
+        startByteLocationOne = 90594
+        endByteLocationOne = 8789
+        endByteLocationTwo = 90598
     elif songNumber == 23:
-        startByteLocationOne = 90603
-        endByteLocationOne = 8804
+        startByteLocationOne = 90602
+        endByteLocationOne = 8803
         endByteLocationTwo = 90606
     elif songNumber == 24:
-        startByteLocationOne = 90611
-        endByteLocationOne = 8818
-        endByteLocationTwo = 90615
+        startByteLocationOne = 90610
+        endByteLocationOne = 8817
+        endByteLocationTwo = 90614
     elif songNumber == 25:
-        startByteLocationOne = 90915
-        endByteLocationOne = 9490
-        endByteLocationTwo = 90919
+        startByteLocationOne = 90914
+        endByteLocationOne = 9489
+        endByteLocationTwo = 90918
     elif songNumber == 26:
-        startByteLocationOne = 90907
-        endByteLocationOne = 9476
+        startByteLocationOne = 90906
+        endByteLocationOne = 9475
         endByteLocationTwo = 90910
     elif songNumber == 27:
-        startByteLocationOne = 90899
-        endByteLocationOne = 9462
-        endByteLocationTwo = 90903
+        startByteLocationOne = 90898
+        endByteLocationOne = 9461
+        endByteLocationTwo = 90902
     elif songNumber == 28:
-        startByteLocationOne = 90619
-        endByteLocationOne = 8832
-        endByteLocationTwo = 90623
+        startByteLocationOne = 90618
+        endByteLocationOne = 8831
+        endByteLocationTwo = 90622
     elif songNumber == 29:
-        startByteLocationOne = 90923
-        startByteLocationTwo = 90931
-        endByteLocationOne = 9504
-        endByteLocationTwo = 9518
-        endByteLocationThree = 90927
-        endByteLocationFour = 90935
+        startByteLocationOne = 90922
+        startByteLocationTwo = 90930
+        endByteLocationOne = 9503
+        endByteLocationTwo = 9517
+        endByteLocationThree = 90926
+        endByteLocationFour = 90934
     elif songNumber == 30:
-        startByteLocationOne = 90923
-        startByteLocationTwo = 90931
-        endByteLocationOne = 9504
-        endByteLocationTwo = 9518
-        endByteLocationThree = 90927
-        endByteLocationFour = 90935
+        startByteLocationOne = 90922
+        startByteLocationTwo = 90930
+        endByteLocationOne = 9503
+        endByteLocationTwo = 9517
+        endByteLocationThree = 90926
+        endByteLocationFour = 90934
     elif songNumber == 31:
-        startByteLocationOne = 90939
-        endByteLocationOne = 9532
-        endByteLocationTwo = 90943
+        startByteLocationOne = 90938
+        endByteLocationOne = 9531
+        endByteLocationTwo = 90942
     elif songNumber == 32:
         pass
     elif songNumber == 33:
-        startByteLocationOne = 90627
-        endByteLocationOne = 8860
-        endByteLocationTwo = 90631
+        startByteLocationOne = 90626
+        endByteLocationOne = 8859
+        endByteLocationTwo = 90630
     elif songNumber == 34:
-        startByteLocationOne = 90635
-        endByteLocationOne = 8874
-        endByteLocationTwo = 90639
+        startByteLocationOne = 90634
+        endByteLocationOne = 8873
+        endByteLocationTwo = 90638
     elif songNumber == 35:
         pass
     elif songNumber == 36:
-        startByteLocationOne = 90643
-        endByteLocationOne = 8902
-        endByteLocationTwo = 90647
+        startByteLocationOne = 90642
+        endByteLocationOne = 8901
+        endByteLocationTwo = 90646
     elif songNumber == 37:
-        startByteLocationOne = 90651
-        endByteLocationOne = 8916
-        endByteLocationTwo = 90655
+        startByteLocationOne = 90650
+        endByteLocationOne = 8915
+        endByteLocationTwo = 90654
     elif songNumber == 38:
-        startByteLocationOne = 90659
-        endByteLocationOne = 8930
-        endByteLocationTwo = 90663
+        startByteLocationOne = 90658
+        endByteLocationOne = 8929
+        endByteLocationTwo = 90662
     elif songNumber == 39:
-        startByteLocationOne = 90667
-        endByteLocationOne = 8944
-        endByteLocationTwo = 90671
+        startByteLocationOne = 90666
+        endByteLocationOne = 8943
+        endByteLocationTwo = 90670
     elif songNumber == 40:
-        startByteLocationOne = 90683
-        startByteLocationTwo = 90955
-        endByteLocationOne = 8972
-        endByteLocationTwo = 9560
-        endByteLocationThree = 90687
-        endByteLocationFour = 90959
+        startByteLocationOne = 90682
+        startByteLocationTwo = 90954
+        endByteLocationOne = 8971
+        endByteLocationTwo = 9559
+        endByteLocationThree = 90686
+        endByteLocationFour = 90958
     elif songNumber == 41:
-        startByteLocationOne = 90683
-        startByteLocationTwo = 90955
-        endByteLocationOne = 8972
-        endByteLocationTwo = 9560
-        endByteLocationThree = 90687
-        endByteLocationFour = 90959
+        startByteLocationOne = 90682
+        startByteLocationTwo = 90954
+        endByteLocationOne = 8971
+        endByteLocationTwo = 9559
+        endByteLocationThree = 90686
+        endByteLocationFour = 90958
     elif songNumber == 42:
-        startByteLocationOne = 90691
-        endByteLocationOne = 8986
-        endByteLocationTwo = 90695
+        startByteLocationOne = 90690
+        endByteLocationOne = 8985
+        endByteLocationTwo = 90694
     elif songNumber == 43:
-        startByteLocationOne = 90699
-        endByteLocationOne = 9000
-        endByteLocationTwo = 90703
+        startByteLocationOne = 90698
+        endByteLocationOne = 8999
+        endByteLocationTwo = 90702
     elif songNumber == 44:
-        startByteLocationOne = 90707
-        endByteLocationOne = 9014
-        endByteLocationTwo = 90711
+        startByteLocationOne = 90706
+        endByteLocationOne = 9013
+        endByteLocationTwo = 90710
     elif songNumber == 45:
-        startByteLocationOne = 90715
-        endByteLocationOne = 9028
-        endByteLocationTwo = 90719
+        startByteLocationOne = 90714
+        endByteLocationOne = 9027
+        endByteLocationTwo = 90718
     elif songNumber == 46:
-        startByteLocationOne = 90731
-        endByteLocationOne = 9056
-        endByteLocationTwo = 90735
+        startByteLocationOne = 90730
+        endByteLocationOne = 9055
+        endByteLocationTwo = 90734
     elif songNumber == 47:
-        startByteLocationOne = 90963
-        endByteLocationOne = 9574
-        endByteLocationTwo = 90967
+        startByteLocationOne = 90962
+        endByteLocationOne = 9573
+        endByteLocationTwo = 90966
     elif songNumber == 48:
         pass
     elif songNumber == 49:
         pass
     elif songNumber == 50:
-        startByteLocationOne = 90739
-        endByteLocationOne = 9084
-        endByteLocationTwo = 90743
+        startByteLocationOne = 90738
+        endByteLocationOne = 9083
+        endByteLocationTwo = 90742
     elif songNumber == 51:
-        startByteLocationOne = 90947
-        endByteLocationOne = 9546
-        endByteLocationTwo = 90951
+        startByteLocationOne = 90946
+        endByteLocationOne = 9545
+        endByteLocationTwo = 90950
     elif songNumber == 52:
         pass
     elif songNumber == 53:
-        startByteLocationOne = 90747
-        startByteLocationTwo = 90971
-        endByteLocationOne = 9112
-        endByteLocationTwo = 90751
-        endByteLocationThree = 90975
+        startByteLocationOne = 90746
+        startByteLocationTwo = 90970
+        endByteLocationOne = 9111
+        endByteLocationTwo = 90750
+        endByteLocationThree = 90974
     elif songNumber == 54:
         pass
     elif songNumber == 55:
-        startByteLocationOne = 90755
-        endByteLocationOne = 9126
-        endByteLocationTwo = 90759
+        startByteLocationOne = 90754
+        endByteLocationOne = 9125
+        endByteLocationTwo = 90758
     elif songNumber == 56:
-        startByteLocationOne = 90763
-        endByteLocationOne = 9140
-        endByteLocationTwo = 90767
+        startByteLocationOne = 90762
+        endByteLocationOne = 9139
+        endByteLocationTwo = 90766
     elif songNumber == 57:
-        startByteLocationOne = 90771
-        endByteLocationOne = 9154
-        endByteLocationTwo = 90775
+        startByteLocationOne = 90770
+        endByteLocationOne = 9153
+        endByteLocationTwo = 90774
     elif songNumber == 58:
-        startByteLocationOne = 90779
-        startByteLocationTwo = 90787
-        endByteLocationOne = 9168
-        endByteLocationTwo = 9182
-        endByteLocationThree = 90783
-        endByteLocationFour = 90791
+        startByteLocationOne = 90778
+        startByteLocationTwo = 90786
+        endByteLocationOne = 9167
+        endByteLocationTwo = 9181
+        endByteLocationThree = 90782
+        endByteLocationFour = 90790
     elif songNumber == 59:
-        startByteLocationOne = 90779
-        startByteLocationTwo = 90787
-        endByteLocationOne = 9168
-        endByteLocationTwo = 9182
-        endByteLocationThree = 90783
-        endByteLocationFour = 90791
+        startByteLocationOne = 90778
+        startByteLocationTwo = 90786
+        endByteLocationOne = 9167
+        endByteLocationTwo = 9181
+        endByteLocationThree = 90782
+        endByteLocationFour = 90790
     elif songNumber == 60:
-        startByteLocationOne = 90795
-        endByteLocationOne = 9196
-        endByteLocationTwo = 90799
+        startByteLocationOne = 90794
+        endByteLocationOne = 9195
+        endByteLocationTwo = 90798
     elif songNumber == 61:
-        startByteLocationOne = 90803
-        endByteLocationOne = 9210
-        endByteLocationTwo = 90807
+        startByteLocationOne = 90802
+        endByteLocationOne = 9209
+        endByteLocationTwo = 90806
     elif songNumber == 62:
         pass
     elif songNumber == 63:
-        startByteLocationOne = 90811
-        endByteLocationOne = 9238
-        endByteLocationTwo = 90815
+        startByteLocationOne = 90810
+        endByteLocationOne = 9237
+        endByteLocationTwo = 90814
     elif songNumber == 64:
-        startByteLocationOne = 90819
-        endByteLocationOne = 9252
-        endByteLocationTwo = 90823
+        startByteLocationOne = 90818
+        endByteLocationOne = 9251
+        endByteLocationTwo = 90822
     elif songNumber == 65:
         pass
     elif songNumber == 66:
-        startByteLocationOne = 90827
-        endByteLocationOne = 9280
-        endByteLocationTwo = 90831
+        startByteLocationOne = 90826
+        endByteLocationOne = 9279
+        endByteLocationTwo = 90830
     elif songNumber == 67:
-        startByteLocationOne = 90835
-        endByteLocationOne = 9294
-        endByteLocationTwo = 90839
+        startByteLocationOne = 90834
+        endByteLocationOne = 9293
+        endByteLocationTwo = 90838
     elif songNumber == 68:
-        startByteLocationOne = 90843
-        endByteLocationOne = 9308
-        endByteLocationTwo = 90847
+        startByteLocationOne = 90842
+        endByteLocationOne = 9307
+        endByteLocationTwo = 90846
     elif songNumber == 69:
-        startByteLocationOne = 90851
-        endByteLocationOne = 9322
-        endByteLocationTwo = 90855
+        startByteLocationOne = 90850
+        endByteLocationOne = 9321
+        endByteLocationTwo = 90854
     elif songNumber == 70:
-        startByteLocationOne = 90859
-        startByteLocationTwo = 90867
-        endByteLocationOne = 9336
-        endByteLocationTwo = 9350
-        endByteLocationThree = 90863
-        endByteLocationFour = 90871
+        startByteLocationOne = 90858
+        startByteLocationTwo = 90866
+        endByteLocationOne = 9335
+        endByteLocationTwo = 9349
+        endByteLocationThree = 90862
+        endByteLocationFour = 90870
     elif songNumber == 71:
-        startByteLocationOne = 90859
-        startByteLocationTwo = 90867
-        endByteLocationOne = 9336
-        endByteLocationTwo = 9350
-        endByteLocationThree = 90863
-        endByteLocationFour = 90871
+        startByteLocationOne = 90858
+        startByteLocationTwo = 90866
+        endByteLocationOne = 9335
+        endByteLocationTwo = 9349
+        endByteLocationThree = 90862
+        endByteLocationFour = 90870
     elif songNumber == 72:
-        startByteLocationOne = 90875
-        startByteLocationTwo = 90883
-        endByteLocationOne = 9364
-        endByteLocationTwo = 9378
-        endByteLocationThree = 90879
-        endByteLocationFour = 90887
+        startByteLocationOne = 90874
+        startByteLocationTwo = 90882
+        endByteLocationOne = 9363
+        endByteLocationTwo = 9377
+        endByteLocationThree = 90878
+        endByteLocationFour = 90886
     elif songNumber == 73:
-        startByteLocationOne = 90875
-        startByteLocationTwo = 90883
-        endByteLocationOne = 9364
-        endByteLocationTwo = 9378
-        endByteLocationThree = 90879
-        endByteLocationFour = 90887
+        startByteLocationOne = 90874
+        startByteLocationTwo = 90882
+        endByteLocationOne = 9363
+        endByteLocationTwo = 9377
+        endByteLocationThree = 90878
+        endByteLocationFour = 90886
     elif songNumber == 74:
         pass
     elif songNumber == 75:
         pass
     elif songNumber == 76:
-        startByteLocationOne = 90891
-        endByteLocationOne = 9420
-        endByteLocationTwo = 90895
+        startByteLocationOne = 90890
+        endByteLocationOne = 9419
+        endByteLocationTwo = 90894
     elif songNumber == 77:
-        startByteLocationOne = 90724
-        endByteLocationOne = 9042
-        endByteLocationTwo = 90727
+        startByteLocationOne = 90723
+        endByteLocationOne = 9041
+        endByteLocationTwo = 90726
     elif songNumber == 78:
-        startByteLocationOne = 90979
-        endByteLocationOne = 9616
-        endByteLocationTwo = 90983
+        startByteLocationOne = 90978
+        endByteLocationOne = 9615
+        endByteLocationTwo = 90982
     elif songNumber == 79:
-        startByteLocationOne = 90987
-        endByteLocationOne = 9630
-        endByteLocationTwo = 90991
+        startByteLocationOne = 90986
+        endByteLocationOne = 9629
+        endByteLocationTwo = 90990
     elif songNumber == 80:
-        startByteLocationOne = 90995
-        endByteLocationOne = 9644
-        endByteLocationTwo = 90999
+        startByteLocationOne = 44131
+        startByteLocationTwo = 58430
+        startByteLocationThree = 90995
+        endByteLocationOne = 9643
+        endByteLocationTwo = 90998
     elif songNumber == 81:
         pass
     elif songNumber == 82:
@@ -629,6 +633,11 @@ def swapMusic():
             pass
         try:
             f.seek(startByteLocationTwo)
+            f.write(startingLoopHex)
+        except NameError:
+            pass
+        try:
+            f.seek(startByteLocationThree)
             f.write(startingLoopHex)
         except NameError:
             pass
@@ -682,7 +691,7 @@ def browseFile():
     browsedFile.config(text = songOnly[1])
 
 def showInfo():
-    Messagebox.ok("Welcome to Melody Bay!\nStep 1: Obtain the music you'd like to use in game & put it next to Melody Bay\nStep 2: Select the music you'd like to replace\nStep 3:Select the music you'd like to use via the Browse Custom Music File button.\nStep 4: if you need to, check Input Looping Points Manually (a lot of songs don't require this)\nStep 5: click Add My Custom Music!\nWith that you're done and put take the Switch folder from the MusicMod folder and replace it with the one in your Switch Direcotry! (if it isn't there recreate the directory structure to the Switch folder!)\nIf you have music that happens to not loop properly I highly encourage inputting the looping points manually in Samples. You can find the samples via an audio app such as Audacity.\n Currently this application does NOT support combo music, you can look forward to that in a future update!\nFor Emulators same idea, but it goes into your mods folder\nIf you'd like more information you can contact me on Twitter/Discord/GameBanana/Github, Username: Joshua_A_Daniel", "How to")
+    Messagebox.ok("Welcome to Melody Bay!\nStep 1: Obtain the music you'd like to use in game & put it next to Melody Bay\nStep 2: Select the music you'd like to replace\nStep 3:Select the music you'd like to use via the Browse Custom Music File button.\nStep 4: if you need to, check Input Looping Points Manually (a lot of songs don't require this)\nStep 5: click Add My Custom Music!\nWith that you're done and put take the Switch folder from the MusicMod folder and replace it with the one in your Switch Direcotry! (if it isn't there recreate the directory structure to the Switch folder!)\nRequirements for this program to work include FFmpeg & PyMusiclooper. Other requirements are included in package!\nIf you have music that happens to not loop properly I highly encourage inputting the looping points manually in Samples. You can find the samples via an audio app such as Audacity.\nCurrently this application does NOT support combo music, you can look forward to that in a future update!\nFor Emulators same idea, but it goes into your mods folder\nIf you'd like more information you can contact me on Twitter/Discord/GameBanana/Github, Username: Joshua_A_Daniel", "How to")
 
 SMRPGText = tb.Label(text="Select the Music you'd like to replace", bootstyle="default")
 SMRPGText.pack(pady=(20, 10))
